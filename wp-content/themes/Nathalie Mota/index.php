@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head></head>
-<body>
-	<h1>PHOTOGRAPH EVENT</h1>
-</body>
-</html>
+<?php get_header(); ?>
+
+<h1>PHOTOGRAPHE EVENT</h1>
+
+<?php get_footer(); ?>

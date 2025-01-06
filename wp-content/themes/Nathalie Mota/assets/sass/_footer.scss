@@ -1,0 +1,16 @@
+/**********/
+/* Footer */
+/**********/
+.menu-footer-container {
+    height: 40px;
+    border-width: 1px 0px 0px 0px;
+    border-style: solid;
+    border-color: #000;
+    ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 45px;
+    }
+}
+

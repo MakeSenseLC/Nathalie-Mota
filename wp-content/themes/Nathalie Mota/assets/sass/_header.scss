@@ -1,0 +1,18 @@
+.header {
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    img {
+        height: 14px;
+        width: auto;
+    }
+    ul {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 45px;
+        }
+}
+
