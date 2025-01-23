@@ -17,6 +17,8 @@ function enqueue_custom_css() {
     wp_enqueue_style( 'custom-style', get_stylesheet_directory_uri() . '/style.css' );
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_custom_css' );
+
+//Prise en charge du logo dans l'administration
 function custom_theme_setup() {
     add_theme_support( 'custom-logo' );
 }
@@ -27,3 +29,22 @@ function enqueue_scripts() {
     wp_enqueue_script( 'script', get_template_directory_uri() . '/assets/scripts/script.js', array(), '1.0', true );
 }
 add_action( 'wp_enqueue_scripts', 'enqueue_scripts' );
+
+// Enregistrer et charger jQuery inclus par WordPress
+function enqueue_jquery_in_theme() {
+    wp_enqueue_script('jquery');
+}
+add_action('wp_enqueue_scripts', 'enqueue_jquery_in_theme');
+
+// Gérer la récupération des premiers et derniers posts pour la navigation dans la single-photos
+function get_custom_boundary_photo_post($position = 'first') {
+    $args = array(
+        'post_type' => 'photos',
+        'posts_per_page' => 1,
+        'order' => ($position === 'first') ? 'ASC' : 'DESC',
+        'orderby' => 'date'
+    );
+    
+    $query = new WP_Query($args);
+    return !empty($query->posts) ? $query->posts[0] : null;
+}

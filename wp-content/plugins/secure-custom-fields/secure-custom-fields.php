@@ -6,7 +6,7 @@
  * Plugin Name:       Secure Custom Fields
  * Plugin URI:        http://wordpress.org/plugins/secure-custom-fields/
  * Description:       Secure Custom Fields (SCF) offers an intuitive way for developers to enhance WordPress content management by adding extra fields and options without coding requirements.
- * Version:           6.4.1-beta5
+ * Version:           6.4.1-beta6
  * Author:            WordPress.org
  * Author URI:        https://wordpress.org/
  * Text Domain:       secure-custom-fields
@@ -35,7 +35,7 @@ if ( ! class_exists( 'ACF' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '6.4.1-beta5';
+		public $version = '6.4.1-beta6';
 
 		/**
 		 * The plugin settings array.
@@ -227,7 +227,7 @@ if ( ! class_exists( 'ACF' ) ) {
 				acf_include( 'includes/admin/admin-notices.php' );
 				acf_include( 'includes/admin/admin-tools.php' );
 				acf_include( 'includes/admin/admin-upgrade.php' );
-				acf_include( 'includes/admin/admin-options-page.php' );
+				acf_include( 'includes/admin/class-acf-admin-options-page.php' );
 			}
 
 			// Include legacy.

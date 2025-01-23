@@ -2,14 +2,16 @@
 //GESTION DE LA MODALE//
 ////////////////////////
 document.addEventListener('DOMContentLoaded', function() {
-    const modalLink = document.querySelector('.modal');
+    const modalLinks = document.querySelectorAll('.modal');
     const overlay = document.querySelector('.overlay');
     const modalContact = document.querySelector('.modal-contact');
 
     // Ouvrir la modal
-    modalLink.addEventListener('click', function(e) {
-        e.preventDefault(); // Pour éviter le comportement par défaut du lien
-        overlay.style.display = 'block';
+    modalLinks.forEach(function(modalLink) {
+        modalLink.addEventListener('click', function(e) {
+            e.preventDefault(); // Pour éviter le comportement par défaut du lien
+            overlay.style.display = 'block';
+        });
     });
 
     // Fermer la modal lors du clic sur l'overlay
@@ -19,10 +21,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Fermer avec la touche Escape
+    // Fermer avec la touche Echap
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && overlay.style.display === 'block') {
             overlay.style.display = 'none';
         }
+    });
+});
+
+// Ajouter la valeur du champs référence dans la modale
+jQuery(document).ready(function($) {
+    // Quand un lien avec la classe .modal est cliqué
+    $('.modal').on('click', function(e) {
+        e.preventDefault(); // Empêche le comportement par défaut du lien
+
+        // Assurez-vous que la variable photoReference est définie
+        if (typeof photoReference !== 'undefined' && photoReference !== '') {
+            // Remplissez le champ du formulaire avec la valeur de la référence
+            $('.ref-photo').val(photoReference);
+        }
+    });
+});
+
+// Changer la miniature au survol de la fleche gauche
+document.addEventListener('DOMContentLoaded', function() {
+    const previewImage = document.getElementById('preview-image');
+    const prevArrow = document.querySelector('.prev-arrow');
+    const nextArrow = document.querySelector('.next-arrow');
+    
+    // Stockage des URLs originales
+    const nextImageUrl = previewImage.getAttribute('data-next');
+    const prevImageUrl = previewImage.getAttribute('data-prev');
+    
+    // Gestion du survol de la flèche gauche
+    prevArrow.addEventListener('mouseenter', function() {
+        previewImage.src = prevImageUrl;
+    });
+    
+    prevArrow.addEventListener('mouseleave', function() {
+        previewImage.src = nextImageUrl;
+    });
+    
+    // Gestion du survol de la flèche droite
+    nextArrow.addEventListener('mouseenter', function() {
+        previewImage.src = nextImageUrl;
+    });
+    
+    nextArrow.addEventListener('mouseleave', function() {
+        previewImage.src = nextImageUrl;
     });
 });
