@@ -1,5 +1,5 @@
 <?php get_header(); ?>
-
+<div class="border-gradient"></div>
 <main>
 	<section class="photo-top">
 		<div class="infos-photo">
@@ -70,8 +70,30 @@
 	</section>
 	<section class="photo-bottom">
 		<h3> Vous aimerez aussi </h3>
-		<div class="related">
-			<?php get_template_part('templates/photo-block'); ?>
+		<div class="photo-list">
+			<?php 
+			$args = array(
+				'post_type' => 'photos',
+				'category_name' => get_the_category()[0]->slug,
+				'posts_per_page' => 2,
+				'post__not_in' => array(get_the_ID()),
+			);
+
+			$my_query = new WP_Query( $args );
+
+			if( $my_query->have_posts() ) : 
+				while( $my_query->have_posts() ) : $my_query->the_post();
+			?> 
+				<?php get_template_part('templates/photo-block'); ?>
+			<?php
+			endwhile;
+			else :
+				?>
+					<p>Il n'y a pas d'autres photos dans cette catégorie.</p>
+				<?php
+			endif;
+			wp_reset_postdata();
+			?>
 		</div>		
 	</section>
 <!--Récupération de la valeur de la balise meta reference -->

@@ -45,11 +45,18 @@ h1, h2, h3, .description_photo {
 }
 
 h1 {
+    position: absolute;
+    width: 100%;
+    margin: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     font-family: 'space_mono', sans-serif;
     font-weight: 700;
     font-style: italic;
     font-size: 96px;
-    line-height: 142px;
+    color: transparent;
+    -webkit-text-stroke: 3px white;
 }
 
 h2 {
@@ -70,6 +77,10 @@ h3 {
 }
 
 body {
+    margin: 0;
+}
+
+section {
     max-width: 90vw;
     margin: 0 auto;
 }
