@@ -12,6 +12,10 @@ function declarer_emplacement_menu() {
 }
 add_action('after_setup_theme', 'declarer_emplacement_menu');
 
+//Déclation des actions Ajax
+add_action('wp_ajax_load_more_photos', 'load_more_photos');
+add_action('wp_ajax_nopriv_load_more_photos', 'load_more_photos'); // Pour les utilisateurs non connectés
+
 //Chargement du fichier CSS
 function enqueue_custom_css() {
     wp_enqueue_style( 'custom-style', get_stylesheet_directory_uri() . '/style.css' );
@@ -47,4 +51,43 @@ function get_custom_boundary_photo_post($position = 'first') {
     
     $query = new WP_Query($args);
     return !empty($query->posts) ? $query->posts[0] : null;
+}
+
+// GESTION DU LOAD-MORE SUR LA PAGE D'ACCUEIL
+function add_ajax_url_to_js() {
+    wp_localize_script('script', 'ajax_loadmore', array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+    ));
+}
+add_action('wp_enqueue_scripts', 'add_ajax_url_to_js');
+
+
+function load_more_photos() {
+    $paged = isset($_POST['page']) ? intval($_POST['page']) : 1;
+    $posts_per_page = 8;
+
+    $args = array(
+        'post_type'      => 'photos',
+        'posts_per_page' => $posts_per_page,
+        'paged'          => $paged,
+    );
+
+    $query = new WP_Query($args);
+    $total_posts = $query->found_posts; // Nombre total d'articles
+    $max_pages = ceil($total_posts / $posts_per_page); // Nombre max de pages
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            get_template_part('templates/photo-block');
+        endwhile;
+    endif;
+
+    wp_reset_postdata();
+
+    // Indique à JS si on est à la dernière page
+    if ($paged >= $max_pages) {
+        echo '<script>document.querySelector(".load-more").style.display = "none";</script>';
+    }
+
+    wp_die();
 }

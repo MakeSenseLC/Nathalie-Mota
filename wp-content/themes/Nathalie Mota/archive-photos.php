@@ -38,15 +38,26 @@ query_posts(array('post_type' => 'photos'));
             wp_reset_postdata();
         } else {
             // Affiche un message si aucune image n'est trouvée
-            echo '<p>Aucune image de paysage disponible.</p>';
+            echo '<p>Aucune image disponible.</p>';
         }
     ?>
 </div>
 <section class="photo-list">
-    <?php if (have_posts()) : while (have_posts()) : the_post();
+    <?php 
+        $args = array(
+            'post_type' => 'photos',
+            'posts_per_page' => 8,
+        );
+        $my_query = new WP_Query( $args );
+
+        if( $my_query->have_posts() ) : 
+            while( $my_query->have_posts() ) : $my_query->the_post();
         get_template_part('templates/photo-block');
         endwhile; endif; 
     ?>
 </section>
+<div class="load-more-zone">
+<p class="load-more">Charger plus</p>
+</div>
 
 <?php get_footer(); ?>

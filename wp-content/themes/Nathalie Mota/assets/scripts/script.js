@@ -71,3 +71,40 @@ document.addEventListener('DOMContentLoaded', function() {
         previewImage.src = nextImageUrl;
     });
 });
+
+////////////////////////
+//GESTION DU LOAD MORE//
+////////////////////////
+document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreButton = document.querySelector('.load-more');
+    let currentPage = 1;
+
+    loadMoreButton.addEventListener('click', function () {
+        currentPage++;
+
+        fetch(ajax_loadmore.ajax_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            body: new URLSearchParams({
+                action: 'load_more_photos',
+                page: currentPage,
+            }),
+        })
+            .then((response) => response.text())
+            .then((data) => {
+                const trimmedData = data.trim();
+
+                if (trimmedData) {
+                    document.querySelector('.photo-list').insertAdjacentHTML('beforeend', trimmedData);
+                }
+
+                // Vérifie si la réponse contient le script cachant le bouton
+                if (!trimmedData || trimmedData.includes('<script>')) {
+                    loadMoreButton.style.display = 'none';
+                }
+            })
+            .catch((error) => console.error('Erreur AJAX:', error));
+    });
+});
