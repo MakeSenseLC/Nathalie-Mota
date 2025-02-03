@@ -42,6 +42,35 @@ query_posts(array('post_type' => 'photos'));
         }
     ?>
 </div>
+<section class="photo-filters">
+    <form id="photo-filter">
+        <select name="category" id="category-filter">
+            <option value="">CATÉGORIES</option>
+            <?php 
+            $categories = get_terms(array('taxonomy' => 'category', 'hide_empty' => false, 'exclude' => array(1)));
+            foreach ($categories as $category) {
+                echo '<option value="' . $category->term_id . '">' . $category->name . '</option>';
+            }
+            ?>
+        </select>
+        <select name="format" id="format-filter">
+            <option value="">FORMATS</option>
+            <?php 
+            $formats = get_terms(array('taxonomy' => 'formats', 'hide_empty' => false));
+            foreach ($formats as $format) {
+                echo '<option value="' . $format->term_id . '">' . $format->name . '</option>';
+            }
+            ?>
+        </select>
+    </form>
+    <form id="photo-date-filter">
+        <select name="date" id="date-filter">        
+            <option value="">TRIER PAR</option>
+            <option value="newest">Les plus récentes</option>
+            <option value="oldest">Les plus anciennes</option>
+        </select>
+    </form>
+</section>
 <section class="photo-list">
     <?php 
         $args = array(

@@ -91,3 +91,54 @@ function load_more_photos() {
 
     wp_die();
 }
+
+//GESTION DES FILTRES SUR LA PAGE D'ACCUEIL
+function filter_photos() {
+    $category = isset($_POST['category']) ? intval($_POST['category']) : '';
+    $format = isset($_POST['formats']) ? intval($_POST['formats']) : '';
+    $date_order = isset($_POST['date_order']) ? sanitize_text_field($_POST['date_order']) : '';
+
+    $args = array(
+        'post_type' => 'photos',
+        'posts_per_page' => -1, // Charge toutes les photos correspondant aux filtres
+    );
+
+    if ($category) {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'category',
+            'field'    => 'term_id',
+            'terms'    => $category,
+        );
+    }
+
+    if ($format) {
+        $args['tax_query'][] = array(
+            'taxonomy' => 'formats',
+            'field'    => 'term_id',
+            'terms'    => $format,
+        );
+    }
+
+    // Ajout du tri par date
+    if ($date_order == "newest") {
+        $args['orderby'] = 'date';
+        $args['order'] = 'DESC';
+    } elseif ($date_order == "oldest") {
+        $args['orderby'] = 'date';
+        $args['order'] = 'ASC';
+    }
+
+    $query = new WP_Query($args);
+
+    if ($query->have_posts()) :
+        while ($query->have_posts()) : $query->the_post();
+            get_template_part('templates/photo-block'); // Affiche chaque photo
+        endwhile;
+    else :
+        echo '<p>Aucune photo trouvée.</p>';
+    endif;
+
+    wp_die(); // Stoppe l'exécution de WordPress proprement
+}
+add_action('wp_ajax_filter_photos', 'filter_photos');
+add_action('wp_ajax_nopriv_filter_photos', 'filter_photos'); // Permet aux visiteurs non connectés d'utiliser l'AJAX

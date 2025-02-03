@@ -108,3 +108,39 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch((error) => console.error('Erreur AJAX:', error));
     });
 });
+
+///////////////////////
+//GESTION DES FILTRES//
+///////////////////////
+document.addEventListener("DOMContentLoaded", function () {
+    const categoryFilter = document.getElementById("category-filter");
+    const formatFilter = document.getElementById("format-filter");
+    const dateFilter = document.getElementById("date-filter");
+    const photoList = document.querySelector(".photo-list");
+
+    function fetchFilteredPhotos() {
+        const category = categoryFilter.value;
+        const format = formatFilter.value;
+        const dateOrder = dateFilter.value;
+
+        const formData = new FormData();
+        formData.append("action", "filter_photos");
+        formData.append("category", category);
+        formData.append("formats", format);
+        formData.append("date_order", dateOrder);
+
+        fetch(ajax_loadmore.ajax_url, {
+            method: "POST",
+            body: formData,
+        })        
+        .then(response => response.text())
+        .then(data => {
+            photoList.innerHTML = data; // Met à jour la liste des photos
+        })
+        .catch(error => console.error("Erreur AJAX :", error));
+    }
+
+    categoryFilter.addEventListener("change", fetchFilteredPhotos);
+    formatFilter.addEventListener("change", fetchFilteredPhotos);
+    dateFilter.addEventListener("change", fetchFilteredPhotos);
+});
