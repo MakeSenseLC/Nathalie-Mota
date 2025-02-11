@@ -95,17 +95,8 @@ main {
 .photo-list {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
+    justify-content: space-between;
     gap: 20px;
     margin-top: 32px;
     margin-bottom: 20px;
-}
-
-.photo-block {
-    width: 48%;
-    img {
-        width: 100%;
-        height: 38vw;
-        object-fit: cover;
-    }
 }

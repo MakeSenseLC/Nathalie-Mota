@@ -1,6 +1,8 @@
+//HERO HEADER
 .hero {
     position : relative;
     margin: 0 auto;
+    margin-bottom: 80px;
     text-align: center;
     img {
         width: 100vw;
@@ -8,9 +10,101 @@
     }
 }
 
+//FILTRES
+
+@mixin dropdown-style {
+  color: $darker;
+  background: #fff;
+  font-family: poppins, sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+}
+
 .photo-filters {
     display: flex;
+    justify-content: space-between;
+    #photo-filter {
+        width: 48%;
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+    }
 }
+
+#photo-date-filter {
+    width: 25%;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    &.active {
+        .dropdown-btn {
+            border-color: #215AFF;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+      }
+
+    .dropdown-btn {
+      @include dropdown-style;
+      border: 1.3px solid #B8BBC2;
+      border-radius: 8px;
+      text-transform: uppercase;
+      padding: 10px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      position: relative;
+      padding-right: 30px;
+    }
+
+    .chevron {
+        position: absolute;
+        right: 10px;
+        transition: transform 0.3s ease; /* Transition pour une animation fluide */
+        transform: rotate(90deg);
+    }
+    
+    &.active .chevron {
+        transform: rotate(-90deg); /* Fait pivoter la flèche lorsqu'elle est active */
+    }
+
+    .dropdown-menu {
+        @include dropdown-style;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        display: none;
+        position: absolute;
+        width: 100%;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        z-index: 1000;
+
+        li {
+            padding: 10px;
+            cursor: pointer;
+            &:hover {
+                background: $tertiary-color;
+            }
+            &:active {
+                background: $secondary-color;
+            }
+            &.selected {
+                color: #fff;
+                background: $primary-color;
+            }
+        }
+    }
+
+    &.active .dropdown-menu {
+        display: block;
+    }
+}
+
+//LOAD MORE
 
 .load-more-zone {
     display: flex;

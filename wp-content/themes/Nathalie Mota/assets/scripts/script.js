@@ -113,15 +113,13 @@ document.addEventListener('DOMContentLoaded', function () {
 //GESTION DES FILTRES//
 ///////////////////////
 document.addEventListener("DOMContentLoaded", function () {
-    const categoryFilter = document.getElementById("category-filter");
-    const formatFilter = document.getElementById("format-filter");
-    const dateFilter = document.getElementById("date-filter");
+    const dropdowns = document.querySelectorAll(".dropdown");
     const photoList = document.querySelector(".photo-list");
 
     function fetchFilteredPhotos() {
-        const category = categoryFilter.value;
-        const format = formatFilter.value;
-        const dateOrder = dateFilter.value;
+        const category = document.getElementById("category-value").value;
+        const format = document.getElementById("format-value").value;
+        const dateOrder = document.getElementById("date-value").value;
 
         const formData = new FormData();
         formData.append("action", "filter_photos");
@@ -132,15 +130,63 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(ajax_loadmore.ajax_url, {
             method: "POST",
             body: formData,
-        })        
+        })
         .then(response => response.text())
         .then(data => {
-            photoList.innerHTML = data; // Met à jour la liste des photos
+            photoList.innerHTML = data;
         })
         .catch(error => console.error("Erreur AJAX :", error));
     }
 
-    categoryFilter.addEventListener("change", fetchFilteredPhotos);
-    formatFilter.addEventListener("change", fetchFilteredPhotos);
-    dateFilter.addEventListener("change", fetchFilteredPhotos);
+    dropdowns.forEach(dropdown => {
+        const btn = dropdown.querySelector(".dropdown-btn");
+        const menu = dropdown.querySelector(".dropdown-menu");
+        const input = dropdown.querySelector("input");
+        const defaultText = btn.textContent.replace('❯', '').trim();
+
+        btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Ferme tous les autres dropdowns avant d'ouvrir celui-ci
+            dropdowns.forEach(d => {
+                if (d !== dropdown) d.classList.remove("active");
+            });
+
+            // Alterner l'ouverture/fermeture
+            dropdown.classList.toggle("active");
+        });
+
+        menu.querySelectorAll("li").forEach(item => {
+            item.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const value = this.getAttribute("data-value");
+
+                if (value === "") {
+                    btn.innerHTML = defaultText + ' <span class="chevron">&#10095;</span>';
+                    input.value = "";
+                    dropdown.classList.remove("active");
+                    fetchFilteredPhotos();
+                    return;
+                }
+
+                btn.innerHTML = this.textContent + ' <span class="chevron">&#10095;</span>';
+                input.value = value;
+                dropdown.classList.remove("active");
+
+                // Ajouter la classe "selected" à l'élément cliqué
+                menu.querySelectorAll("li").forEach(li => li.classList.remove("selected"));
+                this.classList.add("selected");
+
+                fetchFilteredPhotos();
+            });
+        });
+    });
+
+    // Fermer les dropdowns quand on clique en dehors
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest(".dropdown")) {
+            dropdowns.forEach(dropdown => dropdown.classList.remove("active"));
+        }
+    });
 });

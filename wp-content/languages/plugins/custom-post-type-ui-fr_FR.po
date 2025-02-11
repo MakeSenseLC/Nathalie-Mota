@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Plugins - Custom Post Type UI - Stable (latest release) package.
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-03 13:56:37+0000\n"
+"PO-Revision-Date: 2025-02-07 13:49:58+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2110,7 +2110,7 @@ msgstr "Importer des types de publication"
 
 #: inc/tools.php:366
 msgid "NOTE"
-msgstr "NOTE"
+msgstr "Note"
 
 #: inc/tools.php:360
 msgid "If you are wanting to migrate registered post types or taxonomies from this site to another, that will also use Custom Post Type UI, use the import and export functionality. If you are moving away from Custom Post Type UI, use the information in the \"Get Code\" tab."

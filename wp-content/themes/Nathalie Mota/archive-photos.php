@@ -44,31 +44,48 @@ query_posts(array('post_type' => 'photos'));
 </div>
 <section class="photo-filters">
     <form id="photo-filter">
-        <select name="category" id="category-filter">
-            <option value="">CATÉGORIES</option>
-            <?php 
-            $categories = get_terms(array('taxonomy' => 'category', 'hide_empty' => false, 'exclude' => array(1)));
-            foreach ($categories as $category) {
-                echo '<option value="' . $category->term_id . '">' . $category->name . '</option>';
-            }
-            ?>
-        </select>
-        <select name="format" id="format-filter">
-            <option value="">FORMATS</option>
-            <?php 
-            $formats = get_terms(array('taxonomy' => 'formats', 'hide_empty' => false));
-            foreach ($formats as $format) {
-                echo '<option value="' . $format->term_id . '">' . $format->name . '</option>';
-            }
-            ?>
-        </select>
+        <!-- Catégories -->
+        <div class="dropdown">
+            <button type="button" class="dropdown-btn">CATÉGORIES <span class="chevron">&#10095;</span></button>
+            <ul class="dropdown-menu">
+                <li data-value=""> </li>
+                <?php 
+                $categories = get_terms(array('taxonomy' => 'category', 'hide_empty' => false, 'exclude' => array(1)));
+                foreach ($categories as $category) {
+                    echo '<li data-value="' . $category->term_id . '">' . $category->name . '</li>';
+                }
+                ?>
+            </ul>
+            <input type="hidden" id="category-value" name="category" value="">
+        </div>
+
+        <!-- Formats -->
+        <div class="dropdown">
+            <button type="button" class="dropdown-btn">FORMATS <span class="chevron">&#10095;</span></button>
+            <ul class="dropdown-menu">
+                <li data-value=""> </li>
+                <?php 
+                $formats = get_terms(array('taxonomy' => 'formats', 'hide_empty' => false));
+                foreach ($formats as $format) {
+                    echo '<li data-value="' . $format->term_id . '">' . $format->name . '</li>';
+                }
+                ?>
+            </ul>
+            <input type="hidden" id="format-value" name="formats" value="">
+        </div>
     </form>
+
     <form id="photo-date-filter">
-        <select name="date" id="date-filter">        
-            <option value="">TRIER PAR</option>
-            <option value="newest">Les plus récentes</option>
-            <option value="oldest">Les plus anciennes</option>
-        </select>
+        <!-- Trier par date -->
+        <div class="dropdown">
+            <button type="button" class="dropdown-btn">TRIER PAR <span class="chevron">&#10095;</span></button>
+            <ul class="dropdown-menu">
+                <li data-value=""> </li>
+                <li data-value="newest">Les plus récentes</li>
+                <li data-value="oldest">Les plus anciennes</li>
+            </ul>
+            <input type="hidden" id="date-value" name="date" value="">
+        </div>
     </form>
 </section>
 <section class="photo-list">
