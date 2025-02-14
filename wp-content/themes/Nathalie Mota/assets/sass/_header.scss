@@ -15,6 +15,14 @@
         flex-direction: row;
         justify-content: center;
         gap: 45px;
+        
+        li a {
+            transition: font-weight 0.5s ease;
         }
+
+        li:hover a {
+            font-weight: 700;
+        }
+    }
 }
 

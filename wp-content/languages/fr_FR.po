@@ -21206,7 +21206,7 @@ msgstr "Restaurer"
 #: wp-includes/js/dist/block-library.js:39513
 #: wp-includes/js/dist/block-library.js:61829
 #: wp-includes/js/dist/block-library.js:63171
-#: wp-includes/js/dist/edit-post.js:3241 wp-includes/js/dist/edit-site.js:24054
+#: wp-includes/js/dist/edit-post.js:3240 wp-includes/js/dist/edit-site.js:24054
 #: wp-includes/js/dist/edit-site.js:24343
 #: wp-includes/js/dist/edit-site.js:33864
 #: wp-includes/js/dist/edit-site.js:39289 wp-admin/comment.php:251

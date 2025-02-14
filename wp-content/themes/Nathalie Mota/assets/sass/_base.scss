@@ -78,6 +78,8 @@ h3 {
 
 body {
     margin: 0;
+    width: 100vw;
+    overflow-x: hidden;
 }
 
 section {
@@ -132,3 +134,34 @@ p {
     line-height: 24px;
     text-decoration: none;
     }
+
+/*********/
+/*OVERLAY*/
+/*********/
+@mixin fullOverlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+@mixin overlayInfos {
+    color: white;
+    text-transform: uppercase;
+}
+
+.overlay-ref {
+    font-family: 'poppins', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+}
+.overlay-category {
+    font-family: 'space_mono', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: end;
+}

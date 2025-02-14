@@ -142,3 +142,9 @@ function filter_photos() {
 }
 add_action('wp_ajax_filter_photos', 'filter_photos');
 add_action('wp_ajax_nopriv_filter_photos', 'filter_photos'); // Permet aux visiteurs non connectés d'utiliser l'AJAX
+
+//GESTION DE LA LIGHTBOX
+function enqueue_lightbox_script() {
+    wp_enqueue_script('lightbox-script', get_template_directory_uri() . '/assets/js/lightbox.js', array(), false, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_lightbox_script');

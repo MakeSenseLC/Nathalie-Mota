@@ -83,6 +83,8 @@ h3 {
 
 body {
   margin: 0;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 section {
@@ -137,6 +139,22 @@ p {
   text-decoration: none;
 }
 
+/*********/
+/*OVERLAY*/
+/*********/
+.overlay-ref {
+  font-family: "poppins", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.overlay-category {
+  font-family: "space_mono", sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  text-align: end;
+}
+
 .header {
   max-width: 90vw;
   margin: 0 auto;
@@ -155,6 +173,12 @@ p {
   flex-direction: row;
   justify-content: center;
   gap: 45px;
+}
+.header ul li a {
+  transition: font-weight 0.5s ease;
+}
+.header ul li:hover a {
+  font-weight: 700;
 }
 
 /**********/
@@ -182,7 +206,7 @@ p {
   width: 100vw;
   height: 100vh;
   z-index: 999;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-contact {
@@ -391,6 +415,7 @@ main {
   position: relative;
   display: inline-block;
   width: 100%;
+  /* Lorsque le menu est actif */
 }
 .dropdown.active .dropdown-btn {
   border-color: #215AFF;
@@ -430,13 +455,16 @@ main {
   font-size: 12px;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  display: none;
   position: absolute;
   width: 100%;
   list-style: none;
   padding: 0;
   margin: 0;
   z-index: 1000;
+  transform: translateY(-20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out, visibility 0.3s;
 }
 .dropdown .dropdown-menu li {
   padding: 10px;
@@ -453,7 +481,9 @@ main {
   background: #E00000;
 }
 .dropdown.active .dropdown-menu {
-  display: block;
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
 }
 
 .load-more-zone {
@@ -476,6 +506,11 @@ main {
   border-radius: 2px;
   background-color: #D8D8D8;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.load-more:hover {
+  color: #fff;
+  background-color: #000000;
 }
 
 .photo-block {
@@ -541,18 +576,79 @@ main {
   text-transform: uppercase;
   padding: 0px 15px 0px 15px;
 }
-.photo-block-overlay .overlay-bottom-line .overlay-ref {
-  font-family: "poppins", sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-}
-.photo-block-overlay .overlay-bottom-line .overlay-category {
-  font-family: "space_mono", sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  text-align: end;
-}
 
 .photo-block:hover .photo-block-overlay {
   opacity: 1;
+}
+
+.lightbox {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.lightbox .lbTop {
+  width: 97vw;
+  padding-top: 3vh;
+  display: flex;
+  justify-content: flex-end;
+}
+.lightbox .lbTop .cross {
+  cursor: pointer;
+  color: #fff;
+  font-weight: 800;
+}
+.lightbox .lbMiddle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #fff;
+}
+.lightbox .lbMiddle .lbNext, .lightbox .lbMiddle .lbPrevious {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 30px;
+  padding-left: 20px;
+  cursor: pointer;
+}
+.lightbox .lbMiddle .lbNext:hover .precedente, .lightbox .lbMiddle .lbNext:hover .suivante, .lightbox .lbMiddle .lbPrevious:hover .precedente, .lightbox .lbMiddle .lbPrevious:hover .suivante {
+  font-weight: 700;
+}
+.lightbox .lbMiddle .lbNext:hover .lbLeftArrow, .lightbox .lbMiddle .lbNext:hover .lbRightArrow, .lightbox .lbMiddle .lbPrevious:hover .lbLeftArrow, .lightbox .lbMiddle .lbPrevious:hover .lbRightArrow {
+  transform: scaleX(1.5); /* Étire uniquement en largeur */
+  transition: transform 0.3s ease; /* Animation fluide */
+}
+.lightbox .lbMiddle .precedente, .lightbox .lbMiddle .suivante {
+  padding: 0 15px;
+  font-family: "space_mono", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+}
+.lightbox .lbMiddle .lbLeftArrow, .lightbox .lbMiddle .lbRightArrow {
+  font-size: 30px;
+  display: inline-block; /* Permet à transform de bien s'appliquer */
+  transition: transform 0.3s ease;
+}
+.lightbox .lbMiddle .lbCurrentPhoto {
+  max-width: 80vw;
+  max-height: 85vh;
+  width: 100%;
+}
+.lightbox .lbBottom {
+  color: white;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: space-between;
+}
+
+.lightbox.active {
+  display: flex;
 }/*# sourceMappingURL=style.css.map */

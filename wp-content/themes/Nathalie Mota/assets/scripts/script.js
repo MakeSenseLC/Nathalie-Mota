@@ -190,3 +190,86 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+//////////////////////////
+//GESTION DE LA LIGHTBOX//
+//////////////////////////
+document.addEventListener("DOMContentLoaded", function () {
+    let photos = [];
+    let currentIndex = 0;
+
+    const lightbox = document.querySelector(".lightbox");
+    const lbCurrentPhoto = document.querySelector(".lbCurrentPhoto");
+    const lbRef = document.querySelector(".lightbox .overlay-ref");
+    const lbCategory = document.querySelector(".lightbox .overlay-category");
+    const closeBtn = document.querySelector(".cross");
+    const prevBtn = document.querySelector(".lbPrevious");
+    const nextBtn = document.querySelector(".lbNext");
+    const photoList = document.querySelector(".photo-list"); // Conteneur des photos
+
+    function initializeLightbox() {
+        photos = [];
+        const photoBlocks = document.querySelectorAll(".photo-block"); 
+
+        photoBlocks.forEach((block, index) => {
+            const img = block.querySelector("img");
+            const ref = block.querySelector(".overlay-ref").innerText;
+            const category = block.querySelector(".overlay-category").innerText;
+            const fullScreenIcon = block.querySelector(".full-screen");
+
+            photos.push({ src: img.src, ref, category });
+
+            // Supprime les anciens écouteurs avant d'en ajouter de nouveaux
+            fullScreenIcon.removeEventListener("click", openLightbox);
+            fullScreenIcon.addEventListener("click", (e) => openLightbox(e, index));
+        });
+    }
+
+    function openLightbox(event, index) {
+        event.preventDefault();
+        event.stopPropagation();
+        currentIndex = index;
+        updateLightbox();
+        lightbox.classList.add("active");
+    }
+
+    function updateLightbox() {
+        lbCurrentPhoto.src = photos[currentIndex].src;
+        lbRef.innerText = photos[currentIndex].ref;
+        lbCategory.innerText = photos[currentIndex].category;
+    }
+
+    closeBtn.addEventListener("click", () => {
+        lightbox.classList.remove("active");
+    });
+
+    prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+        updateLightbox();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % photos.length;
+        updateLightbox();
+    });
+
+    // Initialisation au chargement de la page
+    initializeLightbox();
+
+    // Surveille le bouton "Charger plus"
+    const loadMoreBtn = document.querySelector(".load-more");
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", () => {
+            setTimeout(() => {
+                initializeLightbox(); // Reinit après chargement de nouvelles images
+            }, 1000);
+        });
+    }
+
+    // **🚀 Surveille le tri AJAX 🚀**
+    const observer = new MutationObserver(() => {
+        initializeLightbox();
+    });
+
+    observer.observe(photoList, { childList: true, subtree: true });
+});
