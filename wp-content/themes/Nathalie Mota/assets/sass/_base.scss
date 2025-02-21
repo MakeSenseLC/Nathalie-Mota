@@ -54,7 +54,7 @@ h1 {
     font-family: 'space_mono', sans-serif;
     font-weight: 700;
     font-style: italic;
-    font-size: 96px;
+    font-size: 8.5vw;
     color: transparent;
     -webkit-text-stroke: 3px white;
 }
@@ -78,30 +78,18 @@ h3 {
 
 body {
     margin: 0;
+    max-width: 100%;
     width: 100vw;
+    overflow-x: hidden;
+}
+
+main {
     overflow-x: hidden;
 }
 
 section {
     max-width: 90vw;
     margin: 0 auto;
-}
-
-.description_photo {
-    font-family: 'space_mono', sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 14px;
-    line-height: 21px;
-    list-style: none;
-    padding-left: 0;
-    li {
-        margin-top: 20px;
-    }
-    a {
-        color: $darker;
-        text-decoration: none;
-    }
 }
 
 p {

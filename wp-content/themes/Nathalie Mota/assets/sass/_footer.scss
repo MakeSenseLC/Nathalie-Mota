@@ -12,6 +12,28 @@
         flex-direction: row;
         justify-content: center;
         gap: 45px;
+        #menu-item-29 a,
+        #menu-item-27 a {
+            transition: font-weight 0.5s ease;
+        }
+
+        #menu-item-29 a:hover,
+        #menu-item-27 a:hover {
+            font-weight: 700;
+        }
     }
 }
 
+//RESPONSIVE
+@media (max-width: 767px) {
+    .menu-footer-container {
+        ul {
+            flex-direction: column;
+            gap: 20px;
+            padding: 40px 0;
+            li {
+                text-align: center;
+            }
+        }
+    }
+}

@@ -43,7 +43,9 @@ jQuery(document).ready(function($) {
     });
 });
 
-// Changer la miniature au survol de la fleche gauche
+////////////////////////////////////
+//NAVIGATION MINIATURE SINGLE-PAGE//
+////////////////////////////////////
 document.addEventListener('DOMContentLoaded', function() {
     const previewImage = document.getElementById('preview-image');
     const prevArrow = document.querySelector('.prev-arrow');
@@ -61,15 +63,6 @@ document.addEventListener('DOMContentLoaded', function() {
     prevArrow.addEventListener('mouseleave', function() {
         previewImage.src = nextImageUrl;
     });
-    
-    // Gestion du survol de la flèche droite
-    nextArrow.addEventListener('mouseenter', function() {
-        previewImage.src = nextImageUrl;
-    });
-    
-    nextArrow.addEventListener('mouseleave', function() {
-        previewImage.src = nextImageUrl;
-    });
 });
 
 ////////////////////////
@@ -77,114 +70,99 @@ document.addEventListener('DOMContentLoaded', function() {
 ////////////////////////
 document.addEventListener('DOMContentLoaded', function () {
     const loadMoreButton = document.querySelector('.load-more');
+    const photoList = document.querySelector('.photo-list');
     let currentPage = 1;
+    let currentFilters = {
+        category: '',
+        formats: '',
+        date_order: ''
+    };
 
-    loadMoreButton.addEventListener('click', function () {
-        currentPage++;
+    // Fonction pour charger les photos
+    function loadPhotos(page = 1, replace = false) {
+        const formData = new FormData();
+        formData.append('action', 'filter_photos');
+        formData.append('page', page);
+        formData.append('category', currentFilters.category);
+        formData.append('formats', currentFilters.formats);
+        formData.append('date_order', currentFilters.date_order);
 
         fetch(ajax_loadmore.ajax_url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            },
-            body: new URLSearchParams({
-                action: 'load_more_photos',
-                page: currentPage,
-            }),
+            body: formData
         })
-            .then((response) => response.text())
-            .then((data) => {
-                const trimmedData = data.trim();
+        .then(response => response.json())
+        .then(data => {
+            if (replace) {
+                photoList.innerHTML = data.html;
+            } else {
+                photoList.insertAdjacentHTML('beforeend', data.html);
+            }
 
-                if (trimmedData) {
-                    document.querySelector('.photo-list').insertAdjacentHTML('beforeend', trimmedData);
-                }
+            loadMoreButton.style.display = 
+                data.current_page >= data.max_pages ? 'none' : 'block';
+        })
+        .catch(error => console.error('Erreur AJAX:', error));
+    }
 
-                // Vérifie si la réponse contient le script cachant le bouton
-                if (!trimmedData || trimmedData.includes('<script>')) {
-                    loadMoreButton.style.display = 'none';
-                }
-            })
-            .catch((error) => console.error('Erreur AJAX:', error));
+    // Gestionnaire pour le bouton "Charger plus"
+    loadMoreButton?.addEventListener('click', function() {
+        currentPage++;
+        loadPhotos(currentPage, false);
     });
-});
 
 ///////////////////////
 //GESTION DES FILTRES//
 ///////////////////////
-document.addEventListener("DOMContentLoaded", function () {
-    const dropdowns = document.querySelectorAll(".dropdown");
-    const photoList = document.querySelector(".photo-list");
-
-    function fetchFilteredPhotos() {
-        const category = document.getElementById("category-value").value;
-        const format = document.getElementById("format-value").value;
-        const dateOrder = document.getElementById("date-value").value;
-
-        const formData = new FormData();
-        formData.append("action", "filter_photos");
-        formData.append("category", category);
-        formData.append("formats", format);
-        formData.append("date_order", dateOrder);
-
-        fetch(ajax_loadmore.ajax_url, {
-            method: "POST",
-            body: formData,
-        })
-        .then(response => response.text())
-        .then(data => {
-            photoList.innerHTML = data;
-        })
-        .catch(error => console.error("Erreur AJAX :", error));
-    }
-
+const dropdowns = document.querySelectorAll(".dropdown");
     dropdowns.forEach(dropdown => {
         const btn = dropdown.querySelector(".dropdown-btn");
         const menu = dropdown.querySelector(".dropdown-menu");
         const input = dropdown.querySelector("input");
         const defaultText = btn.textContent.replace('❯', '').trim();
 
-        btn.addEventListener("click", function (e) {
+        btn.addEventListener("click", function(e) {
             e.preventDefault();
             e.stopPropagation();
-            // Ferme tous les autres dropdowns avant d'ouvrir celui-ci
             dropdowns.forEach(d => {
                 if (d !== dropdown) d.classList.remove("active");
             });
-
-            // Alterner l'ouverture/fermeture
             dropdown.classList.toggle("active");
         });
 
         menu.querySelectorAll("li").forEach(item => {
-            item.addEventListener("click", function (e) {
+            item.addEventListener("click", function(e) {
                 e.preventDefault();
-
                 const value = this.getAttribute("data-value");
 
                 if (value === "") {
                     btn.innerHTML = defaultText + ' <span class="chevron">&#10095;</span>';
                     input.value = "";
-                    dropdown.classList.remove("active");
-                    fetchFilteredPhotos();
-                    return;
+                } else {
+                    btn.innerHTML = this.textContent + ' <span class="chevron">&#10095;</span>';
+                    input.value = value;
                 }
 
-                btn.innerHTML = this.textContent + ' <span class="chevron">&#10095;</span>';
-                input.value = value;
                 dropdown.classList.remove("active");
-
-                // Ajouter la classe "selected" à l'élément cliqué
                 menu.querySelectorAll("li").forEach(li => li.classList.remove("selected"));
                 this.classList.add("selected");
 
-                fetchFilteredPhotos();
+                // Mise à jour des filtres actuels
+                currentFilters = {
+                    category: document.getElementById("category-value").value,
+                    formats: document.getElementById("format-value").value,
+                    date_order: document.getElementById("date-value").value
+                };
+
+                // Réinitialiser la pagination et charger les nouvelles photos
+                currentPage = 1;
+                loadPhotos(1, true);
             });
         });
     });
 
-    // Fermer les dropdowns quand on clique en dehors
-    document.addEventListener("click", function (event) {
+    // Fermer les dropdowns au clic extérieur
+    document.addEventListener("click", function(event) {
         if (!event.target.closest(".dropdown")) {
             dropdowns.forEach(dropdown => dropdown.classList.remove("active"));
         }
@@ -197,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
     let photos = [];
     let currentIndex = 0;
+    const isHomePage = document.body.classList.contains('home');
 
     const lightbox = document.querySelector(".lightbox");
     const lbCurrentPhoto = document.querySelector(".lbCurrentPhoto");
@@ -205,11 +184,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.querySelector(".cross");
     const prevBtn = document.querySelector(".lbPrevious");
     const nextBtn = document.querySelector(".lbNext");
-    const photoList = document.querySelector(".photo-list"); // Conteneur des photos
+    const photoList = document.querySelector(".photo-list");
 
     function initializeLightbox() {
         photos = [];
-        const photoBlocks = document.querySelectorAll(".photo-block"); 
+        const photoBlocks = document.querySelectorAll(".photo-block");
 
         photoBlocks.forEach((block, index) => {
             const img = block.querySelector("img");
@@ -217,26 +196,66 @@ document.addEventListener("DOMContentLoaded", function () {
             const category = block.querySelector(".overlay-category").innerText;
             const fullScreenIcon = block.querySelector(".full-screen");
 
-            photos.push({ src: img.src, ref, category });
+            photos.push({ 
+                src: img.src, 
+                ref, 
+                category
+            });
 
-            // Supprime les anciens écouteurs avant d'en ajouter de nouveaux
             fullScreenIcon.removeEventListener("click", openLightbox);
             fullScreenIcon.addEventListener("click", (e) => openLightbox(e, index));
         });
     }
 
-    function openLightbox(event, index) {
+    async function loadCategoryPhotos(category, clickedRef) {
+        const formData = new FormData();
+        formData.append('action', 'get_category_photos');
+        formData.append('category', category);
+
+        try {
+            const response = await fetch(ajax_loadmore.ajax_url, {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            photos = data.photos;
+            
+            // Trouve l'index de la photo cliquée dans la nouvelle liste
+            currentIndex = photos.findIndex(photo => photo.ref === clickedRef);
+            
+            // Si par hasard on ne trouve pas la photo (ne devrait pas arriver), on prend l'index 0
+            if (currentIndex === -1) currentIndex = 0;
+            
+            updateLightbox();
+        } catch (error) {
+            console.error('Erreur lors du chargement des photos:', error);
+        }
+    }
+
+    async function openLightbox(event, index) {
         event.preventDefault();
         event.stopPropagation();
+        
+        // Stocke les informations de la photo cliquée
+        const clickedPhoto = photos[index];
         currentIndex = index;
+        
+        // Affiche d'abord la photo cliquée
         updateLightbox();
         lightbox.classList.add("active");
+        
+        // Si on est sur une single-photo, charge ensuite toutes les photos de la catégorie
+        if (!isHomePage) {
+            await loadCategoryPhotos(clickedPhoto.category.trim(), clickedPhoto.ref);
+        }
     }
 
     function updateLightbox() {
-        lbCurrentPhoto.src = photos[currentIndex].src;
-        lbRef.innerText = photos[currentIndex].ref;
-        lbCategory.innerText = photos[currentIndex].category;
+        if (photos[currentIndex]) {
+            lbCurrentPhoto.src = photos[currentIndex].src;
+            lbRef.innerText = photos[currentIndex].ref;
+            lbCategory.innerText = photos[currentIndex].category;
+        }
     }
 
     closeBtn.addEventListener("click", () => {
@@ -256,20 +275,42 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialisation au chargement de la page
     initializeLightbox();
 
-    // Surveille le bouton "Charger plus"
-    const loadMoreBtn = document.querySelector(".load-more");
-    if (loadMoreBtn) {
-        loadMoreBtn.addEventListener("click", () => {
-            setTimeout(() => {
-                initializeLightbox(); // Reinit après chargement de nouvelles images
-            }, 1000);
+    // Gestion des mises à jour AJAX sur la home
+    if (isHomePage) {
+        const loadMoreBtn = document.querySelector(".load-more");
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener("click", () => {
+                setTimeout(initializeLightbox, 1000);
+            });
+        }
+
+        const observer = new MutationObserver(() => {
+            initializeLightbox();
         });
+
+        observer.observe(photoList, { childList: true, subtree: true });
+    }
+});
+
+///////////////////////
+//GESTION MENU BURGER//
+///////////////////////
+document.addEventListener('DOMContentLoaded', function () {
+    const burger = document.querySelector('.burger');
+    const closeMenu = document.querySelector('.close-menu');
+    const mobileMenu = document.querySelector('.menu-mobile');
+    const body = document.body;
+
+    function toggleMenu() {
+        mobileMenu.classList.toggle('active');
+        body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : 'auto';
     }
 
-    // **🚀 Surveille le tri AJAX 🚀**
-    const observer = new MutationObserver(() => {
-        initializeLightbox();
-    });
+    burger.addEventListener('click', toggleMenu);
+    closeMenu.addEventListener('click', toggleMenu);
 
-    observer.observe(photoList, { childList: true, subtree: true });
+    // Ferme le menu si un lien est cliqué
+    document.querySelectorAll('.menu-mobile-links a').forEach(link => {
+        link.addEventListener('click', toggleMenu);
+    });
 });

@@ -139,3 +139,25 @@
         background-color: $darker;
     }
 }
+
+//RESPONSIVE
+@media (max-width: 767px) {
+    .hero {
+        margin-bottom: 30px;
+    }
+    .photo-filters {
+        flex-direction: column;
+        justify-content: center;
+        width: 90vw;
+        max-width: 450px;
+        gap: 20px;
+        #photo-filter {
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+        }
+        #photo-date-filter {
+            width: 100%;
+        }
+    }
+}

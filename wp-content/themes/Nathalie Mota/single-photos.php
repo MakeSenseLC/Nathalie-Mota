@@ -13,7 +13,7 @@
 			</ul>
 		</div>
 		<?php the_post_thumbnail(); ?>
-</section>
+	</section>
 	<section class="photo-middle">
 		<div class="photo-interest">
 		<p>Cette photo vous intéresse ?</p>
@@ -51,17 +51,13 @@
 				<div class="nav-photo-arrows">
 					<?php if (!empty($previous_post)) : ?>
 						<a href="<?php echo esc_url(get_permalink($previous_post->ID)); ?>" class="arrow-link prev-arrow">
-							<img class="left-arrow" 
-								src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/left_arrow.png" 
-								alt="Flèche vers la gauche">
+							<span class="left-arrow">&#8592;</span>
 						</a>
 					<?php endif; ?>
 					
 					<?php if (!empty($next_post)) : ?>
 						<a href="<?php echo esc_url(get_permalink($next_post->ID)); ?>" class="arrow-link next-arrow">
-							<img class="right-arrow" 
-								src="<?php echo esc_url(get_template_directory_uri()); ?>/assets/img/right_arrow.png" 
-								alt="Flèche vers la droite">
+							<span class="right-arrow">&#8594;</span>
 						</a>
 					<?php endif; ?>
 				</div>

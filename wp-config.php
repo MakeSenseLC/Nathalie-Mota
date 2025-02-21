@@ -59,7 +59,6 @@ define( 'LOGGED_IN_SALT',    ',kG$*@g=]=AMf&<y]=|0FmvJs%!-aDh&++B7FPzhq;7a&?KKNy
 define( 'NONCE_SALT',        'qAMHu:vlcjkI1HiWhr3fRekqB_$u XVdGvc>;JS31YJbIk/Mti0p??o_A=^=60tc' );
 define( 'WP_CACHE_KEY_SALT', 'Wwr?b}`%(79=?3u$q0OkMS6U8?)}+`ZH;?26T%LBCD=(s/D!7`s056xu(23$n&.@' );
 
-
 /**#@-*/
 
 /**
