@@ -23,7 +23,8 @@ if ( ! class_exists( 'acf_field_number' ) ) :
 			$this->label         = __( 'Number', 'secure-custom-fields' );
 			$this->description   = __( 'An input limited to numerical values.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-number.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/number/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/number/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/number/number-tutorial/';
 			$this->defaults      = array(
 				'default_value' => '',
 				'min'           => '',
@@ -54,18 +55,18 @@ if ( ! class_exists( 'acf_field_number' ) ) :
 			$html  = '';
 
 			// step
-			if ( ! $field['step'] ) {
+			if ( ! isset( $field['step'] ) || ! $field['step'] ) {
 				$field['step'] = 'any';
 			}
 
 			// prepend
-			if ( $field['prepend'] !== '' ) {
-				$field['class'] .= ' acf-is-prepended';
-				$html           .= '<div class="acf-input-prepend">' . acf_esc_html( $field['prepend'] ) . '</div>';
+			if ( isset( $field['prepend'] ) && '' !== $field['prepend'] ) {
+				$field['class'] = isset( $field['class'] ) ? $field['class'] . ' acf-is-prepended' : 'acf-is-prepended';
+				$html          .= '<div class="acf-input-prepend">' . acf_esc_html( $field['prepend'] ) . '</div>';
 			}
 
 			// append
-			if ( $field['append'] !== '' ) {
+			if ( isset( $field['append'] ) && '' !== $field['append'] ) {
 				$field['class'] .= ' acf-is-appended';
 				$html           .= '<div class="acf-input-append">' . acf_esc_html( $field['append'] ) . '</div>';
 			}
@@ -249,7 +250,7 @@ if ( ! class_exists( 'acf_field_number' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value before it is updated in the db
+		 * This filter is applied to the $value before it is updated in the db
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6

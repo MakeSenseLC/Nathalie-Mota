@@ -23,7 +23,8 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 			$this->category      = 'relational';
 			$this->description   = __( 'An interactive dropdown to select one or more posts, pages, custom post type items or archive URLs, with the option to search.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-page-link.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/page-link/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/page-link/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/page-link/page-link-tutorial/';
 			$this->defaults      = array(
 				'post_type'      => array(),
 				'taxonomy'       => array(),
@@ -526,7 +527,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 		}
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
@@ -568,7 +569,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 				$value[ $i ] = $post;
 			}
 
-			// convert back from array if neccessary
+			// convert back from array if necessary
 			if ( ! $field['multiple'] ) {
 				$value = array_shift( $value );
 			}
@@ -579,7 +580,7 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value before it is updated in the db
+		 * This filter is applied to the $value before it is updated in the db
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
@@ -617,9 +618,9 @@ if ( ! class_exists( 'acf_field_page_link' ) ) :
 		/**
 		 * Validates page link fields updated via the REST API.
 		 *
-		 * @param  boolean $valid The current validity booleean
-		 * @param  integer $value The value of the field
-		 * @param  array   $field The field array
+		 * @param  boolean $valid The current validity boolean.
+		 * @param  integer $value The value of the field.
+		 * @param  array   $field The field array.
 		 * @return boolean|WP_Error
 		 */
 		public function validate_rest_value( $valid, $value, $field ) {

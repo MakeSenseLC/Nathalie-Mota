@@ -25,7 +25,8 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 			$this->category      = 'advanced';
 			$this->description   = __( 'An interactive UI for selecting an icon. Select from Dashicons, the media library, or a standalone URL input.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-icon-picker.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/icon-picker/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/icon-picker/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/icon-picker/icon-picker-tutorial/';
 			$this->defaults      = array(
 				'library'       => 'all',
 				'tabs'          => array_keys( $this->get_tabs() ),
@@ -64,6 +65,43 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 			 * @return array
 			 */
 			return apply_filters( 'acf/fields/icon_picker/tabs', $tabs );
+		}
+
+		/**
+		 * Renders an icon list tab (i.e. dashicons, custom icons).
+		 *
+		 * @since ACF 6.4
+		 *
+		 * @param string $tab_name The name of the tab being rendered.
+		 * @return void
+		 */
+		public function render_icon_list_tab( $tab_name ) {
+			?>
+			<div class="acf-icon-list-search-wrap">
+				<?php
+				acf_text_input(
+					array(
+						'class'       => 'acf-icon-list-search-input',
+						'placeholder' => esc_html__( 'Search icons...', 'secure-custom-fields' ),
+						'type'        => 'search',
+					)
+				);
+				?>
+			</div>
+			<div class="acf-icon-list" role="radiogroup" data-parent-tab="<?php echo esc_attr( $tab_name ); ?>"></div>
+			<div class="acf-icon-list-empty">
+				<img src="<?php echo esc_url( acf_get_url( 'assets/images/face-sad.svg' ) ); ?>" />
+				<p class="acf-no-results-text">
+					<?php
+					printf(
+						/* translators: %s: The invalid search term */
+						esc_html__( "No search results for '%s'", 'secure-custom-fields' ),
+						'<span class="acf-invalid-icon-list-search-term"></span>'
+					);
+					?>
+				</p>
+			</div>
+			<?php
 		}
 
 		/**
@@ -131,35 +169,11 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 				}
 
 				$wrapper_class = str_replace( '_', '-', $name );
-				echo '<div class="acf-icon-picker-tabs acf-icon-picker-' . esc_attr( $wrapper_class ) . '-tabs">';
+				echo '<div class="acf-icon-picker-tabs acf-icon-picker-' . esc_attr( $wrapper_class ) . '-tabs" data-tab="' . esc_attr( $name ) . '">';
 
 				switch ( $name ) {
 					case 'dashicons':
-						echo '<div class="acf-dashicons-search-wrap">';
-							acf_text_input(
-								array(
-									'class'       => 'acf-dashicons-search-input',
-									'placeholder' => esc_html__( 'Search icons...', 'secure-custom-fields' ),
-									'type'        => 'search',
-								)
-							);
-						echo '</div>';
-						echo '<div class="acf-dashicons-list"></div>';
-						?>
-						<div class="acf-dashicons-list-empty">
-							<img src="<?php echo esc_url( acf_get_url( 'assets/images/face-sad.svg' ) ); ?>" />
-							<p class="acf-no-results-text">
-								<?php
-								printf(
-									/* translators: %s: The invalid search term */
-									esc_html__( "No search results for '%s'", 'secure-custom-fields' ),
-									'<span class="acf-invalid-dashicon-search-term"></span>'
-								);
-								?>
-							</p>
-						</div>
-
-						<?php
+						$this->render_icon_list_tab( $name );
 						break;
 					case 'media_library':
 						?>
@@ -214,6 +228,18 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 						break;
 					default:
 						do_action( 'acf/fields/icon_picker/tab/' . $name, $field );
+
+						$custom_icons = apply_filters( 'acf/fields/icon_picker/' . $name . '/icons', array(), $field );
+
+						if ( is_array( $custom_icons ) && ! empty( $custom_icons ) ) {
+							$this->render_icon_list_tab( $name );
+
+							acf_localize_data(
+								array(
+									'iconPickerIcons_' . $name  => $custom_icons,
+								)
+							);
+						}
 				}
 
 				echo '</div>';
@@ -244,7 +270,7 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 
 			$return_format_doc = sprintf(
 				'<a href="%s" target="_blank">%s</a>',
-				'https://www.advancedcustomfields.com/resources/icon-picker/',
+				$this->doc_url,
 				__( 'Learn More', 'secure-custom-fields' )
 			);
 
@@ -327,7 +353,7 @@ if ( ! class_exists( 'acf_field_icon_picker' ) ) :
 		/**
 		 * format_value()
 		 *
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @since ACF 6.3
 		 *

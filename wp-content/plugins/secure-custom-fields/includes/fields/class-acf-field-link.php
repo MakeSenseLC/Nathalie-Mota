@@ -23,7 +23,8 @@ if ( ! class_exists( 'acf_field_link' ) ) :
 			$this->category      = 'relational';
 			$this->description   = __( 'Allows you to specify a link and its properties such as title and target using the WordPress native link picker.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-link.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/link/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/link/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/link/link-tutorial/';
 			$this->defaults      = array(
 				'return_format' => 'array',
 			);
@@ -157,7 +158,7 @@ if ( ! class_exists( 'acf_field_link' ) ) :
 		}
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
@@ -217,7 +218,7 @@ if ( ! class_exists( 'acf_field_link' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value before it is updated in the db
+		 * This filter is applied to the $value before it is updated in the db
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6

@@ -23,7 +23,8 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 			$this->category      = 'choice';
 			$this->description   = __( 'A group of radio button inputs that allows the user to make a single selection from values that you specify.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-radio-button.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/radio-button/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/radio/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/radio/radio-tutorial/';
 			$this->defaults      = array(
 				'layout'            => 'vertical',
 				'choices'           => array(),
@@ -112,7 +113,7 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 				return;
 			}
 
-			// Hiden input.
+			// Hidden input.
 			$e .= acf_get_hidden_input( array( 'name' => $field['name'] ) );
 
 			// Open <ul>.
@@ -287,7 +288,7 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 		}
 
 		/**
-		 * This filter is appied to the $field before it is saved to the database
+		 * This filter is applied to the $field before it is saved to the database
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
@@ -309,7 +310,7 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value before it is updated in the db
+		 * This filter is applied to the $value before it is updated in the db
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
@@ -365,7 +366,7 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db
+		 * This filter is applied to the $value after it is loaded from the db
 		 *
 		 * @type    filter
 		 * @since   ACF 5.2.9
@@ -406,7 +407,7 @@ if ( ! class_exists( 'acf_field_radio' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6

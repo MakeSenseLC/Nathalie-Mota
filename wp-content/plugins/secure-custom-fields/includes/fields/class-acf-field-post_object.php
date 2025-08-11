@@ -17,7 +17,8 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 			$this->category      = 'relational';
 			$this->description   = __( 'An interactive and customizable UI for picking one or many posts, pages or post type items with the option to search. ', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-post-object.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/post-object/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/post-object/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/post-object/post-object-tutorial/';
 			$this->defaults      = array(
 				'post_type'            => array(),
 				'taxonomy'             => array(),
@@ -474,7 +475,7 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @since ACF 3.6
 		 *
@@ -496,7 +497,7 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 				$value = $this->get_posts( $value, $field );
 			}
 
-			// convert back from array if neccessary
+			// convert back from array if necessary
 			if ( ! $field['multiple'] && is_array( $value ) ) {
 				$value = current( $value );
 			}
@@ -578,9 +579,9 @@ if ( ! class_exists( 'acf_field_post_object' ) ) :
 		 *
 		 * @since ACF 5.11
 		 *
-		 * @param  boolean $valid The current validity booleean
-		 * @param  integer $value The value of the field
-		 * @param  array   $field The field array
+		 * @param  boolean $valid The current validity boolean.
+		 * @param  integer $value The value of the field.
+		 * @param  array   $field The field array.
 		 * @return boolean|WP_Error
 		 */
 		public function validate_rest_value( $valid, $value, $field ) {

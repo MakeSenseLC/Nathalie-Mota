@@ -24,7 +24,8 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 			$this->category      = 'choice';
 			$this->description   = __( 'A group of buttons with values that you specify, users can choose one option from the values provided.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-button-group.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/button-group/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/button-group/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/button-group/button-group-tutorial/';
 			$this->defaults      = array(
 				'choices'       => array(),
 				'default_value' => '',
@@ -50,7 +51,7 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 			$buttons  = array();
 			$value    = esc_attr( $field['value'] );
 
-			// bail ealrly if no choices
+			// bail early if no choices
 			if ( empty( $field['choices'] ) ) {
 				return;
 			}
@@ -74,21 +75,24 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 			}
 
 			// maybe select initial value
-			if ( ! $field['allow_null'] && $selected === null ) {
+			if ( ( ! isset( $field['allow_null'] ) || ! $field['allow_null'] ) && null === $selected ) {
 				$buttons[0]['checked'] = true;
 			}
 
 			// div
 			$div = array( 'class' => 'acf-button-group' );
 
-			if ( $field['layout'] == 'vertical' ) {
-				$div['class'] .= ' -vertical'; }
-			if ( $field['class'] ) {
-				$div['class'] .= ' ' . $field['class']; }
-			if ( $field['allow_null'] ) {
-				$div['data-allow_null'] = 1; }
+			if ( 'vertical' === acf_maybe_get( $field, 'layout' ) ) {
+				$div['class'] .= ' -vertical';
+			}
+			if ( acf_maybe_get( $field, 'class' ) ) {
+				$div['class'] .= ' ' . acf_maybe_get( $field, 'class' );
+			}
+			if ( acf_maybe_get( $field, 'allow_null' ) ) {
+				$div['data-allow_null'] = 1;
+			}
 
-			// hdden input
+			// hidden input
 			$html .= acf_get_hidden_input( array( 'name' => $field['name'] ) );
 
 			// open
@@ -215,7 +219,7 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 		}
 
 		/**
-		 * This filter is appied to the $field before it is saved to the database
+		 * This filter is applied to the $field before it is saved to the database
 		 *
 		 * @date    18/9/17
 		 * @since   ACF 5.6.3
@@ -230,7 +234,7 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db
+		 * This filter is applied to the $value after it is loaded from the db
 		 *
 		 * @date    18/9/17
 		 * @since   ACF 5.6.3
@@ -262,7 +266,7 @@ if ( ! class_exists( 'acf_field_button_group' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @date    18/9/17
 		 * @since   ACF 5.6.3

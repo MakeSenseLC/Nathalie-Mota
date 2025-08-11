@@ -5,7 +5,7 @@
  * This class handles the clone field type, which allows users to select and display existing fields.
  *
  * @package wordpress/secure-custom-fields
- * @since 5.0.0
+ * @since ACF 5.0.0
  */
 
 // phpcs:disable PEAR.NamingConventions.ValidClassName
@@ -15,9 +15,22 @@ if ( ! class_exists( 'acf_field_clone' ) ) :
 	 *
 	 * Handles the functionality for the clone field type.
 	 *
-	 * @since 5.0.0
+	 * @since ACF 5.0.0
 	 */
 	class acf_field_clone extends acf_field {
+
+		/**
+		 * Array to keep track of fields being cloned.
+		 *
+		 * @var array $cloning
+		 */
+		public $cloning = array();
+		/**
+		 * The type of rows the field supports.
+		 *
+		 * @var array $have_rows
+		 */
+		public $have_rows = 'single';
 		/**
 		 * Initialize the field type.
 		 *
@@ -35,8 +48,8 @@ if ( ! class_exists( 'acf_field_clone' ) ) :
 			$this->category      = 'layout';
 			$this->description   = __( 'Allows you to select and display existing fields. It does not duplicate any fields in the database, but loads and displays the selected fields at run-time. The Clone field can either replace itself with the selected fields or display the selected fields as a group of subfields.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-clone.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/clone/';
-			$this->tutorial_url  = 'https://www.advancedcustomfields.com/resources/how-to-use-the-clone-field/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/clone/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/clone/clone-tutorial/';
 			$this->pro           = true;
 			$this->supports      = array( 'bindings' => false );
 			$this->defaults      = array(
@@ -260,7 +273,7 @@ if ( ! class_exists( 'acf_field_clone' ) ) :
 				$field['key'] = $clone_field['key'] . '_' . $field['key'];
 
 				// modify prefix allowing clone field to save sub fields
-				// - only used for parent seamless fields. Block or sub field's prefix will be overriden which also works
+				// - only used for parent seamless fields. Block or sub field's prefix will be overridden which also works
 				$field['prefix'] = $clone_field['prefix'] . '[' . $clone_field['key'] . ']';
 
 				// modify parent
@@ -412,7 +425,7 @@ if ( ! class_exists( 'acf_field_clone' ) ) :
 
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @type  filter
 		 * @since ACF 3.6 3.6
@@ -522,7 +535,7 @@ if ( ! class_exists( 'acf_field_clone' ) ) :
 					// empty
 				} else {
 
-					// input is not set (hidden by conditioanl logic)
+					// input is not set (hidden by conditional logic)
 					continue;
 				}
 

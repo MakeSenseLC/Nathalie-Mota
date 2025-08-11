@@ -23,7 +23,8 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 			$this->category      = 'choice';
 			$this->description   = __( 'A toggle that allows you to pick a value of 1 or 0 (on or off, true or false, etc). Can be presented as a stylized switch or checkbox.', 'secure-custom-fields' );
 			$this->preview_image = acf_get_url() . '/assets/images/field-type-previews/field-preview-true-false.png';
-			$this->doc_url       = 'https://www.advancedcustomfields.com/resources/true-false/';
+			$this->doc_url       = 'https://developer.wordpress.org/secure-custom-fields/features/fields/true-false/';
+			$this->tutorial_url  = 'https://developer.wordpress.org/secure-custom-fields/features/fields/true-false/true-false-tutorial/';
 			$this->defaults      = array(
 				'default_value' => 0,
 				'message'       => '',
@@ -60,7 +61,7 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 				'value' => 0,
 			);
 
-			$active = $field['value'] ? true : false;
+			$active = isset( $field['value'] ) && $field['value'] ? true : false;
 			$switch = '';
 
 			// checked
@@ -69,13 +70,13 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 			}
 
 			// ui
-			if ( $field['ui'] ) {
+			if ( isset( $field['ui'] ) && $field['ui'] ) {
 
 				// vars
-				if ( $field['ui_on_text'] === '' ) {
+				if ( isset( $field['ui_on_text'] ) && '' === $field['ui_on_text'] ) {
 					$field['ui_on_text'] = __( 'Yes', 'secure-custom-fields' );
 				}
-				if ( $field['ui_off_text'] === '' ) {
+				if ( isset( $field['ui_off_text'] ) && '' === $field['ui_off_text'] ) {
 					$field['ui_off_text'] = __( 'No', 'secure-custom-fields' );
 				}
 
@@ -83,8 +84,8 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 				$input['class'] .= ' acf-switch-input';
 				// $input['style'] = 'display:none;';
 				$switch .= '<div class="acf-switch' . ( $active ? ' -on' : '' ) . '">';
-				$switch .= '<span class="acf-switch-on">' . $field['ui_on_text'] . '</span>';
-				$switch .= '<span class="acf-switch-off">' . $field['ui_off_text'] . '</span>';
+				$switch .= '<span class="acf-switch-on">' . acf_maybe_get( $field, 'ui_on_text', '' ) . '</span>';
+				$switch .= '<span class="acf-switch-off">' . acf_maybe_get( $field, 'ui_off_text', '' ) . '</span>';
 				$switch .= '<div class="acf-switch-slider"></div>';
 				$switch .= '</div>';
 			}
@@ -99,7 +100,7 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 				echo acf_esc_html( $switch );}
 			?>
 			<?php
-			if ( $field['message'] ) :
+			if ( acf_maybe_get( $field, 'message' ) ) :
 				?>
 				<span class="message"><?php echo acf_esc_html( $field['message'] ); ?></span><?php endif; ?>
 	</label>
@@ -195,7 +196,7 @@ if ( ! class_exists( 'acf_field_true_false' ) ) :
 		}
 
 		/**
-		 * This filter is appied to the $value after it is loaded from the db and before it is returned to the template
+		 * This filter is applied to the $value after it is loaded from the db and before it is returned to the template
 		 *
 		 * @type    filter
 		 * @since   ACF 3.6
